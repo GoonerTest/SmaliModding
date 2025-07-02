@@ -1,1 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smali Modding Site</title>
 
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@700&display=swap" rel="stylesheet">
+
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: black;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url('https://source.unsplash.com/1600x900/?cyberpunk,technology') no-repeat center center/cover;
+      filter: blur(8px);
+      z-index: -2;
+    }
+
+    /* Top Right Buttons */
+    .top-buttons {
+      position: fixed;
+      top: 20px;
+      right: 30px;
+      z-index: 1000;
+      display: flex;
+      gap: 20px;
+    }
+
+    .top-buttons a {
+      font-family: 'DynaPuff', cursive;
+      color: white;
+      text-decoration: none;
+      font-size: 1.1rem;
+      position: relative;
+      transition: transform 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .top-buttons a::after {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 3px;
+      bottom: -5px;
+      left: 0;
+      background: white;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.3s ease;
+      box-shadow: 0 0 10px white;
+    }
+
+    .top-buttons a:hover {
+      transform: scale(1.1);
+      text-shadow: 0 0 10px white;
+    }
+
+    .top-buttons a:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    /* Overlay */
+    #overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      transition: opacity 1s ease;
+    }
+
+    #overlay h1 {
+      font-family: 'DynaPuff', cursive;
+      font-size: 3rem;
+      color: white;
+      text-shadow: 0 0 15px white;
+      cursor: pointer;
+    }
+
+    .menu {
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 20px;
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 30px;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: none;
+    }
+
+    h1 {
+      font-family: 'DynaPuff', cursive;
+      color: white;
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+      text-shadow: 0 0 8px white;
+    }
+
+    .ai-box {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      margin-bottom: 20px;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+    }
+
+    .ai-box p {
+      margin: 8px 0;
+      color: #eee;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    }
+
+    .input-area {
+      display: flex;
+      gap: 10px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+    }
+
+    input::placeholder {
+      color: #ccc;
+    }
+
+    button {
+      padding: 12px 20px;
+      border-radius: 10px;
+      border: none;
+      background-color: rgba(255, 255, 255, 0.2);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s, box-shadow 0.3s;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    button:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 15px white;
+    }
+
+    /* Bottom Text */
+    .tagline {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .tagline p {
+      font-family: 'DynaPuff', cursive;
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: white;
+      text-shadow: 0 0 10px white;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Right Buttons -->
+  <div class="top-buttons">
+    <a href="https://google.com" target="_blank">APKS</a>
+    <a href="https://google.com" target="_blank">METADATAS</a>
+    <a href="https://google.com" target="_blank">CREDITS</a>
+  </div>
+
+  <!-- Blur Overlay -->
+  <div id="overlay" onclick="openSite()">
+    <h1>Click to open</h1>
+  </div>
+
+  <!-- Music -->
+  <audio id="bgMusic" src="https://github.com/GoonerTest/Yuh/raw/refs/heads/main/solace%20but%20is%20the%20good%20part%20outro%20loop%20(slowed%20%20reverb).mp3"></audio>
+
+  <!-- Main Content -->
+  <div class="menu" id="mainUI">
+    <h1>Smali Modding Site</h1>
+    <div class="ai-box" id="chatBox">
+      <p><strong>AI:</strong> Hello! How can I help you with Smali modding today?</p>
+    </div>
+    <div class="input-area">
+      <input type="text" id="userInput" placeholder="Type your message..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <!-- Tagline Below Menu -->
+  <div class="tagline">
+    <p>Worlds best 12 modders</p>
+  </div>
+
+  <script>
+    const apiKey = "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"; // Replace with your actual key
+    const chatBox = document.getElementById("chatBox");
+    const userInput = document.getElementById("userInput");
+
+    function openSite() {
+      document.getElementById("overlay").style.opacity = "0";
+      setTimeout(() => {
+        document.getElementById("overlay").style.display = "none";
+        document.getElementById("mainUI").style.display = "block";
+      }, 1000);
+      document.getElementById("bgMusic").play();
+    }
+
+    async function sendMessage() {
+      const message = userInput.value.trim();
+      if (!message) return;
+
+      chatBox.innerHTML += `<p><strong>You:</strong> ${message}</p>`;
+      userInput.value = "";
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      try {
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [
+              { role: "system", content: "You are a helpful assistant for Smali modding topics." },
+              { role: "user", content: message }
+            ]
+          })
+        });
+
+        const data = await response.json();
+        const aiMessage = data.choices?.[0]?.message?.content?.trim() || "Sorry, something went wrong.";
+        chatBox.innerHTML += `<p><strong>AI:</strong> ${aiMessage}</p>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+      } catch (error) {
+        chatBox.innerHTML += `<p><strong>AI:</strong> Error contacting AI.</p>`;
+        console.error(error);
+      }
+    }
+  </script>
+</body>
+</html>
